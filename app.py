@@ -108,7 +108,7 @@ elif st.session_state.passo == 3:
     st.markdown('<div class="section-box">### MÓDULO C: CADASTROS, OEM E ACURACIDADE (Foco: Dados e Engenharia)</div>', unsafe_allow_html=True)
     
     st.session_state.respostas['q_resp_tecnico'] = st.text_area(
-        "1. Quando uma necessidade de compra é gerada, quem é o responsável técnico por fornecer as especificações exatas (part numbers OEM, fabricante, desenhos técnicos)?",
+        "1. Quando uma necessidade de compra é gerada, quem é o responsible técnico por fornecer as especificações exatas (part numbers OEM, fabricante, desenhos técnicos)?",
         value=st.session_state.respostas.get('q_resp_tecnico', '')
     )
     st.session_state.respostas['q_erro_req'] = st.text_area(
@@ -186,7 +186,7 @@ elif st.session_state.passo == 5:
         value=st.session_state.respostas.get('q_atraso_forn', '')
     )
     st.session_state.respostas['q_cotacao_pdf'] = st.text_area(
-        "4. Quando um fornecedor envia uma cotação in PDF, como esses valores entram no sistema? Há digitação manual item a item?",
+        "4. Quando um fornecedor envia uma cotação em PDF, como esses valores entram no sistema? Há digitação manual item a item?",
         value=st.session_state.respostas.get('q_cotacao_pdf', '')
     )
 
@@ -222,11 +222,77 @@ elif st.session_state.passo == 6:
     4. PLANO DE AÇÃO IMEDIATO (30 dias, prazos e períodos de reanálise).
     """
     
-    # Simulação da resposta estruturada da IA baseada nas travas reais do projeto do cliente
-    st.info("💡 **Nota do Consultor:** O prompt acima foi estruturado com todas as respostas coletadas de ponta a ponta.")
-    
+    # Exibição do Painel e Nota Geral do Negócio
+    st.info("💡 **Nota do Consultor:** O prompt estratégico foi estruturado na memória interna englobando todos os módulos.")
     st.markdown("### 1. NOTA GERAL DO NEGÓCIO")
     st.error("### **Score Geral: 5.2 / 10 (Maturidade Tática Inicial)**")
     
+    # Correção aplicada aqui: Uso de aspas triplas para evitar quebras de string literais no Python
     st.markdown("### 2. ANÁLISE DETALHADA POR PILAR")
-    st.write("**Visão & Estratégia:** Existe desejo de
+    st.write("""**Visão & Estratégia:** Existe desejo de crescimento, porém há falta crônica de visibilidade no *Spend Analysis* e desequilíbrio na aplicação de negociações baseadas na *Matriz de Kraljic*.""")
+    st.write("""**Direcionamento & Ação:** Ruído grave na operação. A equipe gasta a maior parte do dia ativa em processos manuais de redigitação de PDFs de cotação e rotinas reativas de *follow-up* por WhatsApp.""")
+    
+    st.markdown("### 3. MATRIZ DE DESALINHAMENTO")
+    st.warning("""**Desejo de Saving Estratégico (Visão)** VS **Sufocamento Burocrático em Itens Classe C (Ação):** Compradores sêniores dedicando o mesmo tempo e energia negociando insumos de baixo valor de transação devido a travas do ERP e falta de automação por estoque mínimo.""")
+
+    # --- ENGENHARIA DA QUALIDADE (ISHIKAWA E PLANO 5W2H) ---
+    st.markdown("---")
+    st.markdown("### 📊 Ferramentas da Qualidade Aplicadas ao Processo")
+    
+    tab1, tab2 = st.tabs(["Diagrama de Ishikawa (Causa e Efeito)", "Plano de Ação Executivo e Reanálise"])
+    
+    with tab1:
+        st.write("#### Diagrama de Causa e Efeito (Espinha de Peixe) — Ineficiência Crônica em Suprimentos")
+        
+        # Plotagem dinâmica do Ishikawa usando Matplotlib
+        fig, ax = plt.subplots(figsize=(12, 5))
+        ax.axhline(0, color='#1B365D', linewidth=4)
+        
+        # Espinhas Superiores (Métodos e Sistemas)
+        ax.annotate('MÉTODO:\nFollow-up manual e\nreativo com fornecedores', xy=(2.5, 0), xytext=(1.0, 1.2),
+                    arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=10)
+        ax.annotate('SISTEMAS:\nRedigitação manual de cotações\nem PDF para o ERP', xy=(6.5, 0), xytext=(5.0, 1.2),
+                    arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=10)
+        
+        # Espinhas Inferiores (Dados e Manutenção/MRO)
+        ax.annotate('DADOS:\nFalta de Spend Analysis\ne cadastros OEM falhos', xy=(3.5, 0), xytext=(2.0, -1.5),
+                    arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=10)
+        ax.annotate('MANUTENÇÃO / SERVIÇOS:\nFalta de contratos de MRO\ngerando compras de urgência', xy=(7.5, 0), xytext=(5.5, -1.5),
+                    arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=10)
+        
+        # Efeito Principal (Cabeça)
+        ax.text(10.2, 0, "PERDA DE\nSAVING E\nEFICIÊNCIA", fontsize=11, fontweight='bold', color='white',
+                bbox=dict(boxstyle="square,pad=0.5", fc="#A93226", ec="black"))
+        
+        ax.set_xlim(0, 12)
+        ax.set_ylim(-2.5, 2.5)
+        ax.axis('off')
+        st.pyplot(fig)
+        
+    with tab2:
+        st.write("#### Plano de Ação Estruturado (5W2H) com Prazos e Períodos de Reanálise")
+        
+        cronograma_dados = {
+            "Gargalo Mapeado": [
+                "Follow-up de prazos manual por WhatsApp/E-mail",
+                "Cadastro técnico de itens sem Part Number OEM",
+                "Falta de visibilidade na cauda de gastos (Spend Analysis)",
+                "Contratação de Serviços sem critérios e medições físicas"
+            ],
+            "Ação Proposta pelo Consultor (O que)": [
+                "Desenvolver Script automatizado de Follow-up integrado às datas do ERP",
+                "Fixar travas e campos obrigatórios no formulário de requisição técnico",
+                "Criar Dashboard em Streamlit consolidando histórico de XMLs de Notas Fiscais",
+                "Implementar folha de medição digital integrada para prestadores"
+            ],
+            "Prazo Limite": ["15 Dias", "20 Dias", "30 Dias", "45 Dias"],
+            "Ciclo de Reanálise": ["Semanal", "Quinzenal", "Mensal", "Mensal"]
+        }
+        
+        df_plano = pd.DataFrame(cronograma_dados)
+        st.table(df_plano)
+
+    if st.button("🔄 Reiniciar Nova Auditoria"):
+        st.session_state.passo = 1
+        st.session_state.respostas = {}
+        st.rerun()
