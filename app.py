@@ -3,71 +3,86 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-# Configuração da página com layout responsivo
+# Configuração da página com layout responsivo e limpo
 st.set_page_config(page_title="VEDA.AI - Diagnóstico Estratégico", layout="wide", initial_sidebar_state="collapsed")
 
-# --- Interface de Design Premium (Injeção de CSS Corporativo) ---
+# --- Interface de Design Premium (Injeção de CSS Corporativo Escuro) ---
 st.markdown("""
     <style>
-    /* Configuração Geral do Fundo e Fonte */
+    /* Configuração Geral do Fundo Escuro e Fonte */
     .stApp {
-        background-color: #F8FAFC;
+        background-color: #1E293B !important; /* Cinza Escuro Premium / Slate */
+        color: #F8FAFC !important; /* Texto Geral Claro */
         font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    /* Forçar a cor do texto padrão em elementos do Streamlit */
+    .stMarkdown, p, span, label, .stTextArea label {
+        color: #F8FAFC !important;
     }
     
     /* Topo e Títulos */
     .main-header {
-        background: linear-gradient(135deg, #1B365D 0%, #2A4D7C 100%);
+        background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%);
         padding: 30px;
         border-radius: 12px;
-        color: white;
+        color: white !important;
         margin-bottom: 25px;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        border: 1px solid #334155;
     }
-    .main-title { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
-    .subtitle { font-size: 15px; color: #E2E8F0; margin-top: 5px; opacity: 0.9; }
+    .main-title { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; margin: 0; color: #FFFFFF !important; }
+    .subtitle { font-size: 15px; color: #93C5FD !important; margin-top: 5px; opacity: 0.9; }
     
-    /* Caixa dos Módulos/Perguntas */
+    /* Caixa dos Módulos/Perguntas (Contraste Cinza Médio) */
     .section-box {
-        background-color: white;
+        background-color: #334155 !important;
         padding: 24px;
         border-radius: 10px;
-        border-left: 6px solid #1B365D;
+        border-left: 6px solid #38BDF8; /* Azul Ciano Vibrante para Destaque */
         margin-bottom: 25px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    .section-title { font-size: 18px; font-weight: 700; color: #1B365D; margin: 0; }
+    .section-title { font-size: 18px; font-weight: 700; color: #38BDF8 !important; margin: 0; }
     
-    /* Estilização Customizada dos Inputs de Texto */
+    /* Estilização dos Inputs de Texto (Fundo Escuro com Letras Brancas) */
     .stTextArea textarea {
-        background-color: #FCFDFE !important;
-        border: 1px solid #E2E8F0 !important;
+        background-color: #1E293B !important;
+        color: #FFFFFF !important;
+        border: 1px solid #475569 !important;
         border-radius: 6px !important;
         transition: all 0.2s ease-in-out;
     }
     .stTextArea textarea:focus {
-        border-color: #1B365D !important;
-        box-shadow: 0 0 0 3px rgba(27,54,93,0.1) !important;
+        border-color: #38BDF8 !important;
+        box-shadow: 0 0 0 3px rgba(56,189,248,0.2) !important;
     }
     
-    /* Painéis de Indicadores / KPI Cards */
+    /* Painéis de Indicadores / KPI Cards na Tela Final */
     .kpi-card {
-        background: white;
+        background: #334155 !important;
         padding: 20px;
         border-radius: 8px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        border-top: 4px solid #E2E8F0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border-top: 4px solid #475569;
         text-align: center;
     }
     .kpi-value { font-size: 24px; font-weight: 700; margin-top: 5px; }
     
-    /* Tabelas Executivas */
-    .styled-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 25px 0;
-        font-size: 15px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    /* Ajuste de abas para o modo escuro */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        background-color: #334155 !important;
+        color: #94A3B8 !important;
+        border-radius: 4px 4px 0px 0px;
+        padding: 10px 20px;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #38BDF8 !important;
+        color: #0F172A !important;
+        font-weight: bold;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -86,10 +101,10 @@ if 'passo' not in st.session_state:
 if 'respostas' not in st.session_state:
     st.session_state.respostas = {}
 
-# Barra de Progresso no estilo corporativo (fina e discreta)
+# Barra de Progresso
 passos_totais = 6
 st.progress(st.session_state.passo / passos_totais)
-st.markdown(f"<p style='text-align: right; color: #64748B; font-size: 12px; margin-top:-10px;'>Etapa {st.session_state.passo} de {passos_totais}</p>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align: right; color: #94A3B8; font-size: 12px; margin-top:-10px;'>Etapa {st.session_state.passo} de {passos_totais}</p>", unsafe_allow_html=True)
 
 # --- FASE 1: MÓDULO A (VISÃO ESTRATÉGICA, SPEND ANALYSIS E STRATEGIC SOURCING) ---
 if st.session_state.passo == 1:
@@ -135,7 +150,7 @@ elif st.session_state.passo == 2:
     st.markdown('<div class="section-box"><div class="section-title">MÓDULO B: ROTINA DIÁRIA E RITMO DE TRABALHO (Foco: Operação/Compradores)</div></div>', unsafe_allow_html=True)
     
     st.session_state.respostas['q_primeira_hora'] = st.text_area(
-        "1. Como é a primeira hora do seu dia de trabalho? Qual tela, sistema ou planilha você abre obrigatoriamente?",
+        "1. Como é a primeira hora do seu dia de trabalho? Qual tela, sistema or planilha você abre obrigatoriamente?",
         value=st.session_state.respostas.get('q_primeira_hora', ''), height=100
     )
     st.session_state.respostas['q_planilhas_fora'] = st.text_area(
@@ -264,22 +279,22 @@ elif st.session_state.passo == 5:
 
 # --- FASE 6: PAINEL EXECUTIVO DE DIAGNÓSTICO ---
 elif st.session_state.passo == 6:
-    st.markdown('<h3 style="color:#1B365D; font-weight:700;">📝 Relatório de Maturidade Operacional</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="color:#38BDF8; font-weight:700; margin-top:10px;">📝 Relatório de Maturidade Operacional</h3>', unsafe_allow_html=True)
     
     # Grid Avançado de KPI Cards Corporativos
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.markdown('<div class="kpi-card" style="border-top-color:#A93226;"><span style="color:#64748B; font-size:13px; font-weight:600;">SCORE VEDA</span><div class="kpi-value" style="color:#A93226;">5.2 / 10</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="kpi-card" style="border-top-color:#E11D48;"><span style="color:#94A3B8; font-size:13px; font-weight:600;">SCORE VEDA</span><div class="kpi-value" style="color:#E11D48;">5.2 / 10</div></div>', unsafe_allow_html=True)
     with col2:
-        st.markdown('<div class="kpi-card" style="border-top-color:#F39C12;"><span style="color:#64748B; font-size:13px; font-weight:600;">SPEND ANALYSIS</span><div class="kpi-value" style="color:#F39C12;">Incipiente</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="kpi-card" style="border-top-color:#F59E0B;"><span style="color:#94A3B8; font-size:13px; font-weight:600;">SPEND ANALYSIS</span><div class="kpi-value" style="color:#F59E0B;">Incipiente</div></div>', unsafe_allow_html=True)
     with col3:
-        st.markdown('<div class="kpi-card" style="border-top-color:#27AE60;"><span style="color:#64748B; font-size:13px; font-weight:600;">CADASTRO OEM</span><div class="kpi-value" style="color:#27AE60;">Acuracidade Regular</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="kpi-card" style="border-top-color:#10B981;"><span style="color:#94A3B8; font-size:13px; font-weight:600;">CADASTRO OEM</span><div class="kpi-value" style="color:#10B981;">Acuracidade Regular</div></div>', unsafe_allow_html=True)
     with col4:
-        st.markdown('<div class="kpi-card" style="border-top-color:#2980B9;"><span style="color:#64748B; font-size:13px; font-weight:600;">FOLLOW-UP</span><div class="kpi-value" style="color:#2980B9;">100% Manual</div></div>', unsafe_allow_html=True)
+        st.markdown('<div class="kpi-card" style="border-top-color:#3B82F6;"><span style="color:#94A3B8; font-size:13px; font-weight:600;">FOLLOW-UP</span><div class="kpi-value" style="color:#3B82F6;">100% Manual</div></div>', unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # Abas Limpas e Modernas
+    # Abas Limpas e Modernas para Modo Escuro
     tab1, tab2, tab3 = st.tabs(["🔍 Diagnóstico por Pilar", "📊 Engenharia da Qualidade", "📅 Cronograma e Ação (5W2H)"])
     
     with tab1:
@@ -287,33 +302,33 @@ elif st.session_state.passo == 6:
         st.write("""**Visão & Estratégia:** Existe desejo latente de crescimento e saving na diretoria, porém há uma falta crônica de visibilidade analítica estruturada de despesas (*Spend Analysis*) e um desequilíbrio na aplicação de táticas de negociação orientadas pelo risco de mercado (*Matriz de Kraljic*).""")
         st.write("""**Direcionamento & Ação:** Ruído operacional grave detectado. A equipe gasta a maior parte do dia ativa em processos manuais de redigitação de propostas comerciais recebidas em PDF e rotinas puramente reativas de cobrança de prazos via WhatsApp.""")
         
-        st.markdown('<div style="background-color:#FEF9E7; padding:15px; border-radius:6px; border-left:4px solid #F39C12; font-size:14px;">'
+        st.markdown('<div style="background-color:#1E293B; padding:15px; border-radius:6px; border:1px solid #F59E0B; font-size:14px; color:#F59E0B;">'
                     '<strong>Matriz de Desalinhamento Crítico:</strong> O desejo corporativo de obter Saving Estratégico (Visão) encontra-se totalmente bloqueado pelo sufocamento burocrático na operação (Ação). Compradores seniores dedicam o mesmo tempo e energia negociando pequenos insumos de baixo valor de transação devido à ausência de travas automáticas de estoque mínimo no ERP.'
                     '</div>', unsafe_allow_html=True)
         
     with tab2:
         st.write("#### Diagrama de Causa e Efeito (Ishikawa) — Perda de Produtividade em Suprimentos")
         
-        # Plotagem do Ishikawa ajustada para as cores do tema corporativo
+        # Plotagem do Ishikawa ajustada para as cores do tema corporativo escuro
         fig, ax = plt.subplots(figsize=(11, 4.5))
-        fig.patch.set_facecolor('#F8FAFC')
-        ax.set_facecolor('#F8FAFC')
+        fig.patch.set_facecolor('#1E293B')
+        ax.set_facecolor('#1E293B')
         
-        ax.axhline(0, color='#1B365D', linewidth=4)
+        ax.axhline(0, color='#38BDF8', linewidth=4)
         
         # Linhas guia do Ishikawa
         ax.annotate('MÉTODO:\nFollow-up manual e\nreativo com fornecedores', xy=(2.5, 0), xytext=(1.0, 1.2),
-                    arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=9)
+                    arrowprops=dict(arrowstyle="->", color='#94A3B8', lw=2), fontsize=9, color='#F8FAFC')
         ax.annotate('SISTEMAS:\nRedigitação manual de cotações\nem PDF para o ERP', xy=(6.5, 0), xytext=(5.0, 1.2),
-                    arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=9)
+                    arrowprops=dict(arrowstyle="->", color='#94A3B8', lw=2), fontsize=9, color='#F8FAFC')
         ax.annotate('DADOS:\nFalta de Spend Analysis\ne cadastros OEM falhos', xy=(3.5, 0), xytext=(2.0, -1.4),
-                    arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=9)
+                    arrowprops=dict(arrowstyle="->", color='#94A3B8', lw=2), fontsize=9, color='#F8FAFC')
         ax.annotate('MANUTENÇÃO / SERVIÇOS:\nFalta de contratos de MRO\ngerando compras de urgência', xy=(7.5, 0), xytext=(5.5, -1.4),
-                    arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=9)
+                    arrowprops=dict(arrowstyle="->", color='#94A3B8', lw=2), fontsize=9, color='#F8FAFC')
         
         # Cabeça do Diagrama (Efeito)
         ax.text(10.2, 0, "VAZAMENTO\nDE SAVING E\nEFICIÊNCIA", fontsize=10, fontweight='bold', color='white',
-                bbox=dict(boxstyle="square,pad=0.5", fc="#A93226", ec="none"))
+                bbox=dict(boxstyle="square,pad=0.5", fc="#E11D48", ec="none"))
         
         ax.set_xlim(0, 12)
         ax.set_ylim(-2.2, 2.2)
