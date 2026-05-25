@@ -1,1 +1,1 @@
-# VEDA.AI-Analytics
+# VEDA.AI
