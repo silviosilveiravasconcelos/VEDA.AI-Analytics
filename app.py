@@ -3,97 +3,49 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import io
-import os
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as RLImage
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 
 # Configuração da página com layout responsivo e limpo
-st.set_page_config(page_title="VEDA.AI - Diagnóstico Estratégico", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="VEDA.IA - Diagnóstico Estratégico", layout="wide", initial_sidebar_state="collapsed")
 
 # --- Interface de Design Premium (Injeção de CSS Corporativo Escuro) ---
 st.markdown("""
     <style>
-    .stApp {
-        background-color: #1E293B !important; 
-        color: #F8FAFC !important; 
-        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    }
-    .stMarkdown, p, span, label, .stTextArea label {
-        color: #F8FAFC !important;
-    }
+    .stApp { background-color: #1E293B !important; color: #F8FAFC !important; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .stMarkdown, p, span, label, .stTextArea label { color: #F8FAFC !important; }
     .main-header {
         background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%);
-        padding: 20px;
-        border-radius: 12px;
-        color: white !important;
-        margin-bottom: 25px;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
-        border: 1px solid #334155;
+        padding: 20px; border-radius: 12px; color: white !important; margin-bottom: 25px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2); border: 1px solid #334155;
     }
     .main-title { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; margin: 0; color: #FFFFFF !important; }
     .subtitle { font-size: 15px; color: #93C5FD !important; margin-top: 5px; opacity: 0.9; }
     .section-box {
-        background-color: #334155 !important;
-        padding: 24px;
-        border-radius: 10px;
-        border-left: 6px solid #38BDF8; 
-        margin-bottom: 25px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        background-color: #334155 !important; padding: 24px; border-radius: 10px;
+        border-left: 6px solid #38BDF8; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
     .section-title { font-size: 18px; font-weight: 700; color: #38BDF8 !important; margin: 0; }
-    .stTextArea textarea {
-        background-color: #1E293B !important;
-        color: #FFFFFF !important;
-        border: 1px solid #475569 !important;
-        border-radius: 6px !important;
-    }
+    .stTextArea textarea { background-color: #1E293B !important; color: #FFFFFF !important; border: 1px solid #475569 !important; border-radius: 6px !important; }
     .kpi-card {
-        background: #334155 !important;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        border-top: 4px solid #475569;
-        text-align: center;
+        background: #334155 !important; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border-top: 4px solid #475569; text-align: center;
     }
     .kpi-value { font-size: 24px; font-weight: 700; margin-top: 5px; }
-    .stTabs [data-baseweb="tab"] {
-        background-color: #334155 !important;
-        color: #94A3B8 !important;
-        border-radius: 4px 4px 0px 0px;
-        padding: 10px 20px;
-    }
-    .stTabs [aria-selected="true"] {
-        background-color: #38BDF8 !important;
-        color: #0F172A !important;
-        font-weight: bold;
-    }
+    .stTabs [data-baseweb="tab"] { background-color: #334155 !important; color: #94A3B8 !important; border-radius: 4px 4px 0px 0px; padding: 10px 20px; }
+    .stTabs [aria-selected="true"] { background-color: #38BDF8 !important; color: #0F172A !important; font-weight: bold; }
     </style>
 """, unsafe_allow_html=True)
 
-# Topo Fixo com Identidade Visual Premium e Verificação de Logo
-col_logo, col_texto = st.columns([1, 8])
-
-with col_logo:
-    # Verificação inteligente de arquivos de imagem para evitar erros na tela
-    if os.path.exists("logo.png"):
-        st.image("logo.png", use_container_width=True)
-    elif os.path.exists("logo.jpg"):
-        st.image("logo.jpg", use_container_width=True)
-    elif os.path.exists("logo.jpeg"):
-        st.image("logo.jpeg", use_container_width=True)
-    else:
-        # Ícone de fallback caso não encontre nenhuma imagem
-        st.markdown("<h1 style='text-align: center; color: #38BDF8; font-size: 60px; margin-top: 10px;'>🚀</h1>", unsafe_allow_html=True)
-
-with col_texto:
-    st.markdown("""
-        <div class="main-header" style="margin-bottom: 0px;">
-            <div class="main-title">📊 VEDA.AI</div>
-            <div class="subtitle">Inteligência Estratégica em Compras • Auditoria de Processos & Strategic Sourcing</div>
-        </div>
-    """, unsafe_allow_html=True)
+# Topo Fixo com Identidade Visual Premium (Sem Logo)
+st.markdown("""
+    <div class="main-header" style="margin-bottom: 0px;">
+        <div class="main-title">📊 VEDA.IA</div>
+        <div class="subtitle">Inteligência Estratégica em Compras • Auditoria de Processos & Strategic Sourcing</div>
+    </div>
+""", unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -108,8 +60,27 @@ passos_totais = 6
 st.progress(st.session_state.passo / passos_totais)
 st.markdown(f"<p style='text-align: right; color: #94A3B8; font-size: 12px; margin-top:-10px;'>Etapa {st.session_state.passo} de {passos_totais}</p>", unsafe_allow_html=True)
 
-# --- FUNÇÃO INTERNA PARA GERAR O PDF COMPILADO ---
-def gerar_pdf(respostas, dados_tabela):
+# --- FUNÇÃO PARA GERAR O GRÁFICO ISHIKAWA PARA O PDF (Fundo Branco) ---
+def gerar_ishikawa_pdf():
+    fig, ax = plt.subplots(figsize=(10, 3.5))
+    fig.patch.set_facecolor('#FFFFFF')
+    ax.set_facecolor('#FFFFFF')
+    ax.axhline(0, color='#1B365D', linewidth=4)
+    ax.annotate('MÉTODO:\nFollow-up manual e reativo', xy=(2.5, 0), xytext=(1.0, 1.2), arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=9, color='black')
+    ax.annotate('SISTEMAS:\nRedigitação manual de PDF', xy=(6.5, 0), xytext=(5.0, 1.2), arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=9, color='black')
+    ax.annotate('DADOS:\nFalta de Spend Analysis', xy=(3.5, 0), xytext=(2.0, -1.4), arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=9, color='black')
+    ax.annotate('MANUTENÇÃO:\nCompras de MRO urgentes', xy=(7.5, 0), xytext=(5.5, -1.4), arrowprops=dict(arrowstyle="->", color='#4A777A', lw=2), fontsize=9, color='black')
+    ax.text(10.2, 0, "PERDA DE\nSAVING", fontsize=10, fontweight='bold', color='white', bbox=dict(boxstyle="square,pad=0.5", fc="#A93226", ec="none"))
+    ax.set_xlim(0, 12); ax.set_ylim(-2.2, 2.2); ax.axis('off')
+    
+    img_buffer = io.BytesIO()
+    fig.savefig(img_buffer, format='png', bbox_inches='tight', dpi=150)
+    img_buffer.seek(0)
+    plt.close(fig)
+    return img_buffer
+
+# --- FUNÇÃO INTERNA PARA GERAR O PDF COMPILADO (COM QUEBRA DE TEXTO) ---
+def gerar_pdf(respostas, dados_tabela, ishikawa_buffer):
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
     story = []
@@ -119,44 +90,65 @@ def gerar_pdf(respostas, dados_tabela):
     h2_style = ParagraphStyle('H2Style', parent=styles['Heading2'], fontSize=14, textColor=colors.HexColor('#4A777A'), spaceBefore=12, spaceAfter=6)
     text_style = ParagraphStyle('TextStyle', parent=styles['Normal'], fontSize=10, leading=14, textColor=colors.HexColor('#333333'), spaceAfter=8)
     alert_style = ParagraphStyle('AlertStyle', parent=styles['Normal'], fontSize=10, leading=14, textColor=colors.HexColor('#B7950B'), spaceAfter=8, fontName='Helvetica-Bold')
+    
+    # Estilos específicos para a tabela (Força a quebra de linha)
+    table_text = ParagraphStyle('TableText', parent=styles['Normal'], fontSize=9, leading=12, textColor=colors.HexColor('#333333'))
+    table_header = ParagraphStyle('TableHeader', parent=styles['Normal'], fontSize=10, leading=12, textColor=colors.whitesmoke, fontName='Helvetica-Bold')
 
     # Cabeçalho do PDF
-    story.append(Paragraph("RELATÓRIO EXECUTIVO DE AUDITORIA - VEDA.AI", title_style))
+    story.append(Paragraph("RELATÓRIO EXECUTIVO DE AUDITORIA - VEDA.IA", title_style))
     story.append(Paragraph("Maturidade Avaliada do Negócio: 5.2 / 10", h2_style))
     story.append(Spacer(1, 10))
     
-    # Análises por Pilar
+    # 1. Análises por Pilar
     story.append(Paragraph("1. DIAGNÓSTICO DOS PILARES", h2_style))
     story.append(Paragraph("<b>Visão & Estratégia:</b> Existe desejo latente de crescimento e saving na diretoria, porém há uma falta crônica de visibilidade analítica estruturada de despesas (Spend Analysis) e um desequilíbrio na aplicação de táticas de negociação orientadas pelo risco de mercado (Matriz de Kraljic).", text_style))
     story.append(Paragraph("<b>Direcionamento & Ação:</b> Ruído operacional grave detectado. A equipe gasta a maior parte do dia ativa em processos manuais de redigitação de propostas comerciais recebidas em PDF e rotinas puramente reativas de cobrança de prazos via WhatsApp.", text_style))
     
-    story.append(Paragraph("2. MATRIZ DE DESALINHAMENTO CRÍTICO", h2_style))
-    story.append(Paragraph("Desejo corporativo de obter Saving Estratégico (Visão) encontra-se totalmente bloqueado pelo sufocamento burocrático na operação (Ação). Compradores seniores dedicam o mesmo tempo e energia negociando pequenos insumos de baixo valor de transação devido à ausência de travas automáticas de estoque mínimo no ERP.", alert_style))
+    # 2. Ishikawa (Imagem)
+    story.append(Paragraph("2. ENGENHARIA DA QUALIDADE (CAUSA E EFEITO)", h2_style))
+    story.append(Paragraph("O diagrama abaixo mapeia os sintomas estruturais que convergem para a ineficiência de suprimentos:", text_style))
+    
+    img = RLImage(ishikawa_buffer, width=460, height=160)
+    story.append(img)
+    story.append(Spacer(1, 15))
+
+    # 3. Matriz de Desalinhamento
+    story.append(Paragraph("3. MATRIZ DE DESALINHAMENTO CRÍTICO", h2_style))
+    story.append(Paragraph("O desejo corporativo de obter Saving Estratégico (Visão) encontra-se totalmente bloqueado pelo sufocamento burocrático na operação (Ação). Compradores seniores dedicam o mesmo tempo e energia negociando pequenos insumos de baixo valor devido à ausência de travas automáticas de estoque mínimo.", alert_style))
     story.append(Spacer(1, 15))
     
-    # Tabela do Plano de Ação 5W2H
-    story.append(Paragraph("3. PLANO DE AÇÃO IMEDIATO (5W2H)", h2_style))
+    # 4. Tabela do Plano de Ação 5W2H (Texto Quebrado Automaticamente)
+    story.append(Paragraph("4. PLANO DE AÇÃO DETALHADO E CRONOGRAMA", h2_style))
     
-    table_data = [["Gargalo Identificado", "Ação Corretiva Proposta", "Prazo", "Reanálise"]]
-    for i in range(len(dados_tabela["Gargalo Identificado"])):
-        table_data.append([
-            dados_tabela["Gargalo Identificado"][i],
-            dados_tabela["Ação Corretiva Proposta (O que fazer)"][i],
-            dados_tabela["Prazo Limite"][i],
-            dados_tabela["Ciclo de Reanálise"][i]
-        ])
+    # Construção da tabela usando Paragraph para evitar sobreposição de textos
+    headers = [
+        Paragraph("Gargalo (Causa Raiz)", table_header),
+        Paragraph("Ação Corretiva (Descrição do Trabalho)", table_header),
+        Paragraph("Prazo e Tempo Necessário", table_header),
+        Paragraph("Status / Reanálise", table_header)
+    ]
+    table_data = [headers]
+    
+    for i in range(len(dados_tabela["Gargalo (Causa Raiz)"])):
+        row = [
+            Paragraph(dados_tabela["Gargalo (Causa Raiz)"][i], table_text),
+            Paragraph(dados_tabela["Ação Corretiva (Descrição do Trabalho)"][i], table_text),
+            Paragraph(dados_tabela["Prazo e Tempo Necessário"][i], table_text),
+            Paragraph(dados_tabela["Status / Reanálise"][i], table_text)
+        ]
+        table_data.append(row)
         
-    t = Table(table_data, colWidths=[130, 220, 80, 80])
+    t = Table(table_data, colWidths=[110, 200, 110, 90])
     t.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#1B365D')),
-        ('TEXTCOLOR', (0,0), (-1,0), colors.whitesmoke),
         ('ALIGN', (0,0), (-1,-1), 'LEFT'),
-        ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0,0), (-1,-1), 9),
-        ('BOTTOMPADDING', (0,0), (-1,0), 6),
-        ('BACKGROUND', (0,1), (-1,-1), colors.HexColor('#F4F7F9')),
-        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#CCCCCC')),
         ('VALIGN', (0,0), (-1,-1), 'TOP'),
+        ('BOTTOMPADDING', (0,0), (-1,0), 8),
+        ('TOPPADDING', (0,0), (-1,-1), 8),
+        ('BOTTOMPADDING', (0,1), (-1,-1), 8),
+        ('BACKGROUND', (0,1), (-1,-1), colors.HexColor('#F8FAFC')),
+        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#CBD5E1')),
     ]))
     
     story.append(t)
@@ -230,7 +222,7 @@ elif st.session_state.passo == 5:
     with col1:
         if st.button("⬅ Voltar", use_container_width=True): st.session_state.passo = 4; st.rerun()
     with col2:
-        if st.button("Consolidar e Executar VEDA.AI 🚀", use_container_width=True): st.session_state.passo = 6; st.rerun()
+        if st.button("Consolidar e Executar VEDA.IA 🚀", use_container_width=True): st.session_state.passo = 6; st.rerun()
 
 # --- FASE 6: PAINEL DE RESULTADOS COM EXPORTAÇÃO EM PDF ---
 elif st.session_state.passo == 6:
@@ -267,12 +259,32 @@ elif st.session_state.passo == 6:
         st.pyplot(fig)
         
     with tab3:
-        st.write("#### Plano de Ação Estruturado (5W2H Executivo)")
+        st.write("#### Plano de Ação Estruturado e Cronograma (5W2H Executivo)")
         cronograma_dados = {
-            "Gargalo Identificado": ["Follow-up de prazos manual por WhatsApp", "Cadastro técnico sem Part Number OEM", "Falta de Spend Analysis estruturado", "Contratação de Serviços sem medição física"],
-            "Ação Corretiva Proposta (O que fazer)": ["Desenvolver Script automatizado de Follow-up", "Fixar travas e campos obrigatórios no sistema", "Criar Dashboard unificado em Streamlit", "Implementar folha de medição digital integrada"],
-            "Prazo Limite": ["15 Dias", "20 Dias", "30 Dias", "45 Dias"],
-            "Ciclo de Reanálise": ["Semanal", "Quinzenal", "Mensal", "Mensal"]
+            "Gargalo (Causa Raiz)": [
+                "Follow-up de prazos 100% manual e reativo", 
+                "Cadastros técnicos sem especificação OEM", 
+                "Falta de visibilidade analítica (Spend Analysis)", 
+                "Serviços contratados sem medição física"
+            ],
+            "Ação Corretiva (Descrição do Trabalho)": [
+                "Desenvolver e parametrizar Script Python/ERP para disparar alertas automáticos aos fornecedores 5 dias antes do vencimento.", 
+                "Configurar travas lógicas no formulário de requisição: bloqueio de avanço se os campos 'Fabricante' e 'Part Number' estiverem vazios.", 
+                "Extrair base de XMLs dos últimos 12 meses e construir Dashboard interativo em Streamlit para cruzar Centro de Custo x Categoria.", 
+                "Desenhar e implantar folha de medição digital em aplicativo mobile para aprovação técnica conjunta antes do faturamento."
+            ],
+            "Prazo e Tempo Necessário": [
+                "15 Dias (Sendo 5 de mapeamento e 10 para código)", 
+                "10 Dias (Imediato - Alteração no sistema)", 
+                "30 Dias (15 para dados, 15 para construção do painel)", 
+                "45 Dias (Requer treinamento de fornecedores)"
+            ],
+            "Status / Reanálise": [
+                "Semanalmente (Toda Sexta)", 
+                "Quinzenal (Amostragem de Pedidos)", 
+                "Mensal (Fechamento do Mês)", 
+                "Mensal (Auditoria de Contratos)"
+            ]
         }
         st.table(pd.DataFrame(cronograma_dados))
 
@@ -280,15 +292,16 @@ elif st.session_state.passo == 6:
     st.markdown("---")
     st.markdown("### 📥 Exportação Executiva")
     
-    # Chama a função de renderização em background
-    pdf_data = gerar_pdf(st.session_state.respostas, cronograma_dados)
+    # Renderização da imagem Ishikawa e do PDF em background
+    ishikawa_buffer = gerar_ishikawa_pdf()
+    pdf_data = gerar_pdf(st.session_state.respostas, cronograma_dados, ishikawa_buffer)
     
     col_btn1, col_btn2 = st.columns([2, 8])
     with col_btn1:
         st.download_button(
             label="Download Relatório em PDF 📄",
             data=pdf_data,
-            file_name="Relatorio_Diagnostico_VEDA_AI.pdf",
+            file_name="Relatorio_Diagnostico_VEDA_IA.pdf",
             mime="application/pdf",
             use_container_width=True
         )
