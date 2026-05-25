@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import io
+import os
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -71,15 +72,20 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Topo Fixo com Identidade Visual Premium e Logo
+# Topo Fixo com Identidade Visual Premium e Verificação de Logo
 col_logo, col_texto = st.columns([1, 8])
 
 with col_logo:
-    # Chama a imagem que você subiu no GitHub (certifique-se de que o nome seja 'logo.png')
-    try:
+    # Verificação inteligente de arquivos de imagem para evitar erros na tela
+    if os.path.exists("logo.png"):
         st.image("logo.png", use_container_width=True)
-    except:
-        st.warning("Logo não encontrada. Faça o upload de 'logo.png' no GitHub.")
+    elif os.path.exists("logo.jpg"):
+        st.image("logo.jpg", use_container_width=True)
+    elif os.path.exists("logo.jpeg"):
+        st.image("logo.jpeg", use_container_width=True)
+    else:
+        # Ícone de fallback caso não encontre nenhuma imagem
+        st.markdown("<h1 style='text-align: center; color: #38BDF8; font-size: 60px; margin-top: 10px;'>🚀</h1>", unsafe_allow_html=True)
 
 with col_texto:
     st.markdown("""
