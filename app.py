@@ -79,7 +79,7 @@ def gerar_ishikawa_pdf():
     plt.close(fig)
     return img_buffer
 
-# --- FUNÇÃO INTERNA PARA GERAR O PDF COMPILADO (COM QUEBRA DE TEXTO) ---
+# --- FUNÇÃO INTERNA PARA GERAR O PDF COMPILADO ---
 def gerar_pdf(respostas, dados_tabela, ishikawa_buffer):
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
@@ -118,10 +118,9 @@ def gerar_pdf(respostas, dados_tabela, ishikawa_buffer):
     story.append(Paragraph("O desejo corporativo de obter Saving Estratégico (Visão) encontra-se totalmente bloqueado pelo sufocamento burocrático na operação (Ação). Compradores seniores dedicam o mesmo tempo e energia negociando pequenos insumos de baixo valor devido à ausência de travas automáticas de estoque mínimo.", alert_style))
     story.append(Spacer(1, 15))
     
-    # 4. Tabela do Plano de Ação 5W2H (Texto Quebrado Automaticamente)
+    # 4. Tabela do Plano de Ação 5W2H
     story.append(Paragraph("4. PLANO DE AÇÃO DETALHADO E CRONOGRAMA", h2_style))
     
-    # Construção da tabela usando Paragraph para evitar sobreposição de textos
     headers = [
         Paragraph("Gargalo (Causa Raiz)", table_header),
         Paragraph("Ação Corretiva (Descrição do Trabalho)", table_header),
@@ -250,10 +249,10 @@ elif st.session_state.passo == 6:
         fig, ax = plt.subplots(figsize=(11, 3.5))
         fig.patch.set_facecolor('#1E293B'); ax.set_facecolor('#1E293B')
         ax.axhline(0, color='#38BDF8', linewidth=4)
-        ax.annotate('MÉTODO:\nFollow-up manual', xy=(2.5, 0), xytext=(1.0, 1.2), arrowprops=dict(arrowstyle="->", color='#94A3B8', lw=2), fontsize=9, color='#F8FAFC')
-        ax.annotate('SISTEMAS:\nRedigitação de PDF', xy=(6.5, 0), xytext=(5.0, 1.2), arrowprops=dict(arrowstyle="->", color='#94A3B8', lw=2), fontsize=9, color='#F8FAFC')
+        ax.annotate('MÉTODO:\nFollow-up manual e reativo', xy=(2.5, 0), xytext=(1.0, 1.2), arrowprops=dict(arrowstyle="->", color='#94A3B8', lw=2), fontsize=9, color='#F8FAFC')
+        ax.annotate('SISTEMAS:\nRedigitação manual de PDF', xy=(6.5, 0), xytext=(5.0, 1.2), arrowprops=dict(arrowstyle="->", color='#94A3B8', lw=2), fontsize=9, color='#F8FAFC')
         ax.annotate('DADOS:\nFalta de Spend Analysis', xy=(3.5, 0), xytext=(2.0, -1.4), arrowprops=dict(arrowstyle="->", color='#94A3B8', lw=2), fontsize=9, color='#F8FAFC')
-        ax.annotate('MANUTENÇÃO:\nCompras de urgência', xy=(7.5, 0), xytext=(5.5, -1.4), arrowprops=dict(arrowstyle="->", color='#94A3B8', lw=2), fontsize=9, color='#F8FAFC')
+        ax.annotate('MANUTENÇÃO:\nCompras de MRO urgentes', xy=(7.5, 0), xytext=(5.5, -1.4), arrowprops=dict(arrowstyle="->", color='#94A3B8', lw=2), fontsize=9, color='#F8FAFC')
         ax.text(10.2, 0, "PERDA DE\nSAVING", fontsize=10, fontweight='bold', color='white', bbox=dict(boxstyle="square,pad=0.5", fc="#E11D48", ec="none"))
         ax.set_xlim(0, 12); ax.set_ylim(-2.2, 2.2); ax.axis('off')
         st.pyplot(fig)
@@ -268,19 +267,19 @@ elif st.session_state.passo == 6:
                 "Serviços contratados sem medição física"
             ],
             "Ação Corretiva (Descrição do Trabalho)": [
-                "Desenvolver e parametrizar Script Python/ERP para disparar alertas automáticos aos fornecedores 5 dias antes do vencimento.", 
-                "Configurar travas lógicas no formulário de requisição: bloqueio de avanço se os campos 'Fabricante' e 'Part Number' estiverem vazios.", 
-                "Extrair base de XMLs dos últimos 12 meses e construir Dashboard interativo em Streamlit para cruzar Centro de Custo x Categoria.", 
-                "Desenhar e implantar folha de medição digital em aplicativo mobile para aprovação técnica conjunta antes do faturamento."
+                "Padronizar rotina semanal de extração de pedidos em aberto (relatório nativo do ERP) e criar template de e-mail em lote. Definir 'Dia D' na semana exclusivo para follow-up preventivo.", 
+                "Implementar política de 'Tolerância Zero' com formulário padrão de solicitação. Requisições sem Part Number/OEM serão devolvidas imediatamente à Engenharia sem processamento.", 
+                "Extrair relatório de compras dos últimos 6 meses do ERP e montar Matriz de Kraljic e Curva ABC inicial via Excel/PowerBI para focar esforços apenas nas top 15 categorias.", 
+                "Criar um Boletim de Medição (BM) em formato doc/Excel. Estabelecer regra junto ao Financeiro para bloquear qualquer fatura de serviço que não possua o BM assinado pelo gestor do contrato."
             ],
             "Prazo e Tempo Necessário": [
-                "15 Dias (Sendo 5 de mapeamento e 10 para código)", 
-                "10 Dias (Imediato - Alteração no sistema)", 
-                "30 Dias (15 para dados, 15 para construção do painel)", 
-                "45 Dias (Requer treinamento de fornecedores)"
+                "7 Dias (Extração de relatório base e treinamento prático da equipe)", 
+                "10 Dias (Aprovação da política junto à diretoria e comunicado interno)", 
+                "20 Dias (10 dias de higienização de dados e 10 para estruturação da planilha)", 
+                "15 Dias (Criação do documento padrão e alinhamento do fluxo com Contas a Pagar)"
             ],
             "Status / Reanálise": [
-                "Semanalmente (Toda Sexta)", 
+                "Semanalmente (Toda Sexta-feira)", 
                 "Quinzenal (Amostragem de Pedidos)", 
                 "Mensal (Fechamento do Mês)", 
                 "Mensal (Auditoria de Contratos)"
