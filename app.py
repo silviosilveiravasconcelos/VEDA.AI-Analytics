@@ -18,7 +18,7 @@ from reportlab.lib import colors
 # CONFIGURAÇÕES DE E-MAIL
 # ==========================================
 EMAIL_REMETENTE = "vesda.ai.analytics@gmail.com"
-SENHA_DO_EMAIL = "dugn fhbu nrzy xweo"
+SENHA_DO_EMAIL = "vyxo pyxq gwdp jass"
 EMAIL_PADRAO_CONSULTOR = "silviosileiravasconcelos@hotmail.com"
 FICHEIRO_CONFIG = "config_veda.json"
 
